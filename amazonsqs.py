@@ -1,9 +1,14 @@
+# -*- coding: utf-8 -*-
+
 from boto.sqs.connection import SQSConnection
 from boto.sqs.message import Message
-import os, ConfigParser
+import os
+import ConfigParser
 import simplejson as json
 
-class SQS:
+
+class SQS(object):
+
     def __init__(self):
         ruta = os.path.dirname(os.path.realpath(__file__))
         config = ConfigParser.ConfigParser()
@@ -50,4 +55,3 @@ class SQS:
 
     def delete_queue(self):
         return self.conn.delete_queue(self.queue)
-

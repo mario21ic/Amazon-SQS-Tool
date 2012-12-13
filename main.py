@@ -73,13 +73,14 @@ while 1:
 
         # Vaciar queue
         elif action == "V" or action == "v":
-            rondas = raw_input("Escriba el número de intentos (10 mensajes x intento): ");
+            rondas = raw_input("Escriba el número de intentos (10 mensajes x "
+                " intento): ")
 
             try:
                 mensajes = amazon_sqs.count()
                 print "%s mensajes a eliminar" % mensajes
 
-                if mensajes>0:
+                if mensajes > 0:
                     amazon_sqs.clear()
                     print "Queue limpio"
 
@@ -88,7 +89,8 @@ while 1:
 
         # Eliminar queue
         elif action == "D" or action == "d":
-            confirmar = raw_input("¿Está seguro que desea eliminar la cola? [S/N]: ")
+            confirmar = raw_input("¿Está seguro que desea eliminar la cola? "
+                "[S/N]: ")
             if confirmar == "S" or confirmar == "s":
                 try:
                     amazon_sqs.delete_queue()
