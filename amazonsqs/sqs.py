@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
+import simplejson as json
 
 from boto.sqs.connection import SQSConnection
 from boto.sqs.message import Message
-import os
-import ConfigParser
-import simplejson as json
+from amazonsqs import credentials
 
 
 class SQS(object):
 
-    def __init__(self, config_file="config.ini"):
-        config = ConfigParser.ConfigParser()
-        config.read(os.path.join(os.getcwd(), config_file))
+    def __init__(self, config="config.ini"):
+        if isinstance(config, basestring):
+            config = credentials.ConfigFileCredentials(config)
+        elif not isinstance(config, credentials.Credentials):
+            raise TypeError("Unsupported config parameter type")
 
-        aws_access_key_id = config.get("amazonsqs", "access_key_id")
-        aws_secret_access_key = config.get("amazonsqs", "secret_access_key")
-        aws_queue = config.get("amazonsqs", "queue")
+        aws_access_key_id, aws_secret_access_key, aws_queue = config.get_data()
 
         try:
             self.conn = SQSConnection(aws_access_key_id, aws_secret_access_key)
