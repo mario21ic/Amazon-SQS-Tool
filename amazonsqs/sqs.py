@@ -46,7 +46,7 @@ class SQS(object):
 
     def delete(self, id):
         #print "Eliminando %s" % id
-        self.cola.delete_message(id)
+        self.queue.delete_message(id)
 
     def clear(self):
         return self.queue.clear()
