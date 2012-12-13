@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
+import logging
+import sys
 
-from amazonsqs import SQS
+from amazonsqs import SQS, log
+
 amazon_sqs = SQS()
+log.setup('INFO')
+
 
 while 1:
     print "---------------------------"
-    print "-     AmazonSQS           -"
+    print "-     Amazon SQS Tool     -"
     print "---------------------------"
     print "- [N] Nuevo               -"
 
@@ -20,7 +25,7 @@ while 1:
     action = raw_input("Seleccione una accion o cola: ").upper()
 
     if action == "Q":
-        print "Bytez"
+        logging.info("Bytez")
         exit(1)
 
     elif action == "N":
@@ -29,14 +34,14 @@ while 1:
         try:
             amazon_sqs.create_queue(queue_name, queue_timeout)
         except:
-            print "Error creando queue"
+            print >> sys.stderr, ("Error creando queue")
 
     else:
         try:
             cola = colas[int(action)].name
             amazon_sqs.set_queue(cola)
         except:
-            print "Error al seleccionar la cola"
+            print >> sys.stderr, ("Error al seleccionar la cola")
             exit()
 
         print "---------------------------"
@@ -60,16 +65,17 @@ while 1:
             data = raw_input("Escriba la data a enviar: ")
             try:
                 amazon_sqs.write(data)
-                print "Datos escritos: %s" % data
+                logging.info("Datos escritos: %s" % data)
             except:
-                print "Error escribiendo: %s" % data
+                print >> sys.stderr, ("Error escribiendo: %s" % data)
 
         # Leer mensajes
         elif action == "L":
             mensajes = amazon_sqs.get_messages()
-            print "%s mensajes en %s" % (len(mensajes), cola)
+            logging.info("%s mensajes en %s" % (len(mensajes), cola))
             for mensaje in mensajes:
-                print "id: %s - mensaje: %s" % (mensaje.id, mensaje.get_body())
+                logging.info("id: %s - mensaje: %s" % (mensaje.id,
+                    mensaje.get_body()))
 
         # Vaciar queue
         elif action == "V":
@@ -78,14 +84,14 @@ while 1:
 
             try:
                 mensajes = amazon_sqs.count()
-                print "%s mensajes a eliminar" % mensajes
+                logging.info("%s mensajes a eliminar" % mensajes)
 
                 if mensajes > 0:
                     amazon_sqs.clear()
-                    print "Queue limpio"
+                    logging.info("Queue limpio")
 
             except:
-                print "Error limpiando"
+                print >> sys.stderr, ("Error limpiando")
 
         # Eliminar queue
         elif action == "D":
@@ -94,9 +100,9 @@ while 1:
             if confirmar == "S":
                 try:
                     amazon_sqs.delete_queue()
-                    print "Queue %s eliminado" % cola
+                    logging.info("Queue %s eliminado" % cola)
                 except:
-                    print "Error eliminando %s" % cola
+                    print >> sys.stderr, ("Error eliminando %s" % cola)
 
         else:
             print "Operación inválida"
