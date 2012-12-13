@@ -9,10 +9,9 @@ import simplejson as json
 
 class SQS(object):
 
-    def __init__(self):
-        ruta = os.path.dirname(os.path.realpath(__file__))
+    def __init__(self, config_file="config.ini"):
         config = ConfigParser.ConfigParser()
-        config.read(str(ruta) + "/config.ini")
+        config.read(os.path.join(os.getcwd(), config_file))
 
         aws_access_key_id = config.get("amazonsqs", "access_key_id")
         aws_secret_access_key = config.get("amazonsqs", "secret_access_key")

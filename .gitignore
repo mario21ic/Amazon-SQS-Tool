@@ -36,3 +36,6 @@ nosetests.xml
 
 # Config
 config.ini
+
+#Ninja-IDE
+*.nja

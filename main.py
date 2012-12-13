@@ -17,13 +17,13 @@ while 1:
     print "- [Q] Salir               -"
     print "---------------------------"
 
-    action = raw_input("Seleccione una accion o cola: ")
+    action = raw_input("Seleccione una accion o cola: ").upper()
 
-    if action == "Q" or action == "q":
+    if action == "Q":
         print "Bytez"
-        exit()
+        exit(1)
 
-    elif action == "N" or action == "n":
+    elif action == "N":
         queue_name = raw_input("Nombre del nuevo queue: ")
         queue_timeout = raw_input("Timeout del nuevo queue: ")
         try:
@@ -53,10 +53,10 @@ while 1:
         print "- [Q] Salir               -"
         print "---------------------------"
 
-        action = raw_input("Seleccione una acción: ")
+        action = raw_input("Seleccione una acción: ").upper()
 
         # Nuevo mensaje
-        if action == "N" or action == "n":
+        if action == "N":
             data = raw_input("Escriba la data a enviar: ")
             try:
                 amazon_sqs.write(data)
@@ -65,14 +65,14 @@ while 1:
                 print "Error escribiendo: %s" % data
 
         # Leer mensajes
-        elif action == "L" or action == "l":
+        elif action == "L":
             mensajes = amazon_sqs.get_messages()
             print "%s mensajes en %s" % (len(mensajes), cola)
             for mensaje in mensajes:
                 print "id: %s - mensaje: %s" % (mensaje.id, mensaje.get_body())
 
         # Vaciar queue
-        elif action == "V" or action == "v":
+        elif action == "V":
             rondas = raw_input("Escriba el número de intentos (10 mensajes x "
                 " intento): ")
 
@@ -88,10 +88,10 @@ while 1:
                 print "Error limpiando"
 
         # Eliminar queue
-        elif action == "D" or action == "d":
+        elif action == "D":
             confirmar = raw_input("¿Está seguro que desea eliminar la cola? "
-                "[S/N]: ")
-            if confirmar == "S" or confirmar == "s":
+                "[S/N]: ").upper()
+            if confirmar == "S":
                 try:
                     amazon_sqs.delete_queue()
                     print "Queue %s eliminado" % cola
