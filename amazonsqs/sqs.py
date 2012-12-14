@@ -1,17 +1,20 @@
-from boto.sqs.connection import SQSConnection
-from boto.sqs.message import Message
-import os, ConfigParser
+# -*- coding: utf-8 -*-
 import simplejson as json
 
-class SQS:
-    def __init__(self):
-        ruta = os.path.dirname(os.path.realpath(__file__))
-        config = ConfigParser.ConfigParser()
-        config.read(str(ruta) + "/config.ini")
+from boto.sqs.connection import SQSConnection
+from boto.sqs.message import Message
+from amazonsqs import credentials
 
-        aws_access_key_id = config.get("amazonsqs", "access_key_id")
-        aws_secret_access_key = config.get("amazonsqs", "secret_access_key")
-        aws_queue = config.get("amazonsqs", "queue")
+
+class SQS(object):
+
+    def __init__(self, config="config.ini"):
+        if isinstance(config, basestring):
+            config = credentials.ConfigFileCredentials(config)
+        elif not isinstance(config, credentials.Credentials):
+            raise TypeError("Unsupported config parameter type")
+
+        aws_access_key_id, aws_secret_access_key, aws_queue = config.get_data()
 
         try:
             self.conn = SQSConnection(aws_access_key_id, aws_secret_access_key)
@@ -43,11 +46,10 @@ class SQS:
 
     def delete(self, id):
         #print "Eliminando %s" % id
-        self.cola.delete_message(id)
+        self.queue.delete_message(id)
 
     def clear(self):
         return self.queue.clear()
 
     def delete_queue(self):
         return self.conn.delete_queue(self.queue)
-
