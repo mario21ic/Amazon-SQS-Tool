@@ -39,3 +39,7 @@ config.ini
 
 #Ninja-IDE
 *.nja
+
+# VIM
+.*.swp
+.*.swo
