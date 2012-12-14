@@ -25,6 +25,9 @@ class SQS(object):
     def get_all_queues(self):
         return self.conn.get_all_queues()
 
+    def get_queue_attributes(self):
+        return self.conn.get_queue_attributes(self.queue, attribute='All')
+
     def create_queue(self, queue, timeout):
         return self.conn.create_queue(queue, timeout)
 

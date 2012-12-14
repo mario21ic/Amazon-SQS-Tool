@@ -77,6 +77,12 @@ while 1:
                 logging.info("id: %s - mensaje: %s" % (mensaje.id,
                     mensaje.get_body()))
 
+        # Informacion queue
+        elif action == "I":
+            attributes = amazon_sqs.get_queue_attributes()
+            for attribute in attributes.keys():
+                logging.info("%s -> %s" % (attribute, attributes[attribute]))
+
         # Vaciar queue
         elif action == "V":
             rondas = raw_input("Escriba el número de intentos (10 mensajes x "
