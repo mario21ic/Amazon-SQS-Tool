@@ -1,3 +1,4 @@
 [amazonsqs]
+queue = http:/myurl_queue.com/aws/dsadsasa
 access_key_id = AAAAAAAAAAA
 secret_access_key = EDDDDDDDDDDDDFFFFFFFFFFFGGGGGGGG
